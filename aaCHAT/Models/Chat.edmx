@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="aaCHATModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ChatSession">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MessageSession">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Body" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="From" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="SentAt" Type="datetime" Nullable="false" />
+          <Property Name="ChatSessionID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__MessageSe__ChatS__1273C1CD">
+          <End Role="ChatSession" Type="Self.ChatSession" Multiplicity="1" />
+          <End Role="MessageSession" Type="Self.MessageSession" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ChatSession">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MessageSession">
+              <PropertyRef Name="ChatSessionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="aaCHATModelStoreContainer">
+          <EntitySet Name="ChatSession" EntityType="Self.ChatSession" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MessageSession" EntityType="Self.MessageSession" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__MessageSe__ChatS__1273C1CD" Association="Self.FK__MessageSe__ChatS__1273C1CD">
+            <End Role="ChatSession" EntitySet="ChatSession" />
+            <End Role="MessageSession" EntitySet="MessageSession" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="aaCHATModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ChatSession">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="MessageSessions" Relationship="Self.FK__MessageSe__ChatS__1273C1CD" FromRole="ChatSession" ToRole="MessageSession" />
+        </EntityType>
+        <EntityType Name="MessageSession">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="From" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SentAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ChatSessionID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ChatSession" Relationship="Self.FK__MessageSe__ChatS__1273C1CD" FromRole="MessageSession" ToRole="ChatSession" />
+        </EntityType>
+        <Association Name="FK__MessageSe__ChatS__1273C1CD">
+          <End Role="ChatSession" Type="Self.ChatSession" Multiplicity="1" />
+          <End Role="MessageSession" Type="Self.MessageSession" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ChatSession">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MessageSession">
+              <PropertyRef Name="ChatSessionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="aaCHAT" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ChatSessions" EntityType="Self.ChatSession" />
+          <EntitySet Name="MessageSessions" EntityType="Self.MessageSession" />
+          <AssociationSet Name="FK__MessageSe__ChatS__1273C1CD" Association="Self.FK__MessageSe__ChatS__1273C1CD">
+            <End Role="ChatSession" EntitySet="ChatSessions" />
+            <End Role="MessageSession" EntitySet="MessageSessions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="aaCHATModelStoreContainer" CdmEntityContainer="aaCHAT">
+          <EntitySetMapping Name="ChatSessions">
+            <EntityTypeMapping TypeName="aaCHATModel.ChatSession">
+              <MappingFragment StoreEntitySet="ChatSession">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MessageSessions">
+            <EntityTypeMapping TypeName="aaCHATModel.MessageSession">
+              <MappingFragment StoreEntitySet="MessageSession">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="SentAt" ColumnName="SentAt" />
+                <ScalarProperty Name="ChatSessionID" ColumnName="ChatSessionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

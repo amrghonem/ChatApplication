@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="aaCHATModelStoreContainer" CdmEntityContainer="aaCHAT">
+    <EntitySetMapping Name="ChatSessions">
+      <EntityTypeMapping TypeName="aaCHATModel.ChatSession">
+        <MappingFragment StoreEntitySet="ChatSession">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MessageSessions">
+      <EntityTypeMapping TypeName="aaCHATModel.MessageSession">
+        <MappingFragment StoreEntitySet="MessageSession">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Body" ColumnName="Body" />
+          <ScalarProperty Name="From" ColumnName="From" />
+          <ScalarProperty Name="SentAt" ColumnName="SentAt" />
+          <ScalarProperty Name="ChatSessionID" ColumnName="ChatSessionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

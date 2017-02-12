@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="aaCHATModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="ChatSession">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="MessageSessions" Relationship="Self.FK__MessageSe__ChatS__1273C1CD" FromRole="ChatSession" ToRole="MessageSession" />
+  </EntityType>
+  <EntityType Name="MessageSession">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="From" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="SentAt" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ChatSessionID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ChatSession" Relationship="Self.FK__MessageSe__ChatS__1273C1CD" FromRole="MessageSession" ToRole="ChatSession" />
+  </EntityType>
+  <Association Name="FK__MessageSe__ChatS__1273C1CD">
+    <End Role="ChatSession" Type="Self.ChatSession" Multiplicity="1" />
+    <End Role="MessageSession" Type="Self.MessageSession" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ChatSession">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MessageSession">
+        <PropertyRef Name="ChatSessionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="aaCHAT" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="ChatSessions" EntityType="Self.ChatSession" />
+    <EntitySet Name="MessageSessions" EntityType="Self.MessageSession" />
+    <AssociationSet Name="FK__MessageSe__ChatS__1273C1CD" Association="Self.FK__MessageSe__ChatS__1273C1CD">
+      <End Role="ChatSession" EntitySet="ChatSessions" />
+      <End Role="MessageSession" EntitySet="MessageSessions" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

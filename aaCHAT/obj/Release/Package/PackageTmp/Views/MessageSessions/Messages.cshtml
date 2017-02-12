@@ -1,0 +1,90 @@
+﻿@model IEnumerable<aaCHAT.Models.MessageSession>
+@{
+    ViewBag.Title = "Messages";
+}
+<h2>Chat Room</h2>
+<div class="container">
+<div class="row">
+    <div id="chatmsg">
+        @foreach (var msg in Model)
+        {
+            <div class="col-lg-4" style="margin-bottom:10px;">@msg.From Says :</div><div class="col-lg-8" style="margin-bottom:10px;">@msg.Body</div>
+
+        }
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-lg-12" style="margin:5px;">
+        <textarea class="form-control" style="" id="txtmsg" placeholder="Your Message Her ..."></textarea>
+    </div>
+    <div class="col-lg-2" style="margin:5px;">
+        <input type="button" id="btnsend" class="btn btn-info" value="Send Messasge" />
+    </div>
+    <div class="col-lg-4" style="margin:5px;">
+        <input type="text" class="form-control" id="txtname" placeholder="Your Name ..." />
+    </div>
+</div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+@section scripts
+{
+<script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
+<script src="~/signalr/js"></script>
+
+    <script>
+    $(document).ready(function(){
+        $.connection.hub.start();
+    });
+
+    $("#btnsend").click(function(){
+        var sessid = @ViewBag.SessionID;
+            $.connection.hub.start()
+            .done(function(){
+                $.connection.myHub.server.sendmessage($("#txtname").val(),$("#txtmsg").val(),sessid);
+                console.log("Done !!!");
+            })
+            .fail(function(){console.log("Error");})
+        });
+
+        $.connection.myHub.client.sendmessage = function (from, msg,sessionid) {
+            var ids = @ViewBag.SessionID;
+            if (ids == sessionid) {
+                $("#chatmsg").append('<div class="col-lg-4" style="margin-bottom:10px;">' + from + ' Says :</div><div class="col-lg-8" style="margin-bottom:10px;">' + msg + '</div>');
+            }
+
+        }
+    </script>
+    
+}
+
+<script>
+    $(document).ready(function () {
+        $("#btnsend").click(function () {
+            var b =$("#txtmsg").val();
+            var name =$("#txtname").val();
+            var id = @ViewBag.SessionID;
+            $.ajax({
+                url: "/MessageSessions/AddNewMsg",
+                type: "Post",
+                Datatype: "Json",
+                data: {
+                    body: b,
+                    from: name,
+                    chatSessionID:id
+                },
+                success: function (data) {
+                    if (data.state == "True") {
+                        
+                    }
+                    else {
+                        
+                    }
+                },
+                error: function () {
+                    
+                }
+            });
+        });
+    });
+</script>
